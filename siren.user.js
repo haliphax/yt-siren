@@ -1,16 +1,30 @@
 // ==UserScript==
 // @name         YT Siren
 // @namespace    https://roadha.us
-// @version      0.1
+// @version      0.2
 // @description  Reports current YouTube video and chapter on change
 // @author       haliphax
 // @match        https://www.youtube.com/watch?v=*
 // @icon         https://www.google.com/s2/favicons?domain=youtube.com
-// @grant        none
+// @grant        GM_registerMenuCommand
+// @grant        GM_setValue
+// @grant        GM_getValue
 // ==/UserScript==
 
 (async () => {
     'use strict';
+
+    let sirenUrl = GM_getValue('sirenUrl', 'http://localhost:8008', 'u'),
+        sirenPassword = GM_getValue('sirenPassword', 'changeme', 'p');
+
+    GM_registerMenuCommand(
+        'Settings',
+        () => {
+            sirenUrl = prompt('Siren URL:', sirenUrl);
+            sirenPassword = prompt('Siren password:', sirenPassword);
+            GM_setValue('sirenUrl', sirenUrl);
+            GM_setValue('sirenPassword', sirenPassword);
+        });
 
     const extract = RegExp('[?&]v=([^&]+)', 'i');
 
@@ -19,11 +33,13 @@
         songUrl = null;
 
     const update = async () => {
-        await fetch('http://localhost:8008', {
+        await fetch(sirenUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json;charset=utf-8' },
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
             body: JSON.stringify({
-                pwd: 'luggage',
+                pwd: sirenPassword,
                 song: songTitle,
                 chapter: chapterTitle,
                 url: songUrl,
@@ -57,7 +73,7 @@
 
     const init = async () => {
         const video = document.querySelector('h1.title:not(.meta)'),
-              chapter = document.querySelector('.ytp-chapter-title-content');
+            chapter = document.querySelector('.ytp-chapter-title-content');
 
         if (video === null || chapter === null) {
             setTimeout(init, 1000);
