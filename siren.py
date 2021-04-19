@@ -15,7 +15,7 @@ def post():
         abort(403)
 
     with open('song.txt', 'w') as f:
-        f.write(request.json['song'])
+        f.write(f'{request.json["song"]} :: {request.json["chapter"]}')
 
     return ''
 
