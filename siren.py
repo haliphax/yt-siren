@@ -21,4 +21,6 @@ def post():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8443)
+    host = environ.get('YT_SIREN_HOST', '127.0.0.1')
+    port = environ.get('YT_SIREN_PORT', 8008)
+    app.run(host=host, port=port)

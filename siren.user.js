@@ -19,7 +19,7 @@
         songUrl = null;
 
     const update = async () => {
-        await fetch('http://localhost:8443', {
+        await fetch('http://localhost:8008', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json;charset=utf-8' },
             body: JSON.stringify({
