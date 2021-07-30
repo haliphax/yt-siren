@@ -15,7 +15,11 @@ def post():
         abort(403)
 
     with open('song.txt', 'w') as f:
-        f.write(f'{request.json["song"]} :: {request.json["chapter"]}')
+        f.write(f"♫ Now playing: {request.json['channel']} "
+                f"- {request.json['song']}")
+
+        if request.json['chapter']:
+            f.write(f" - {request.json['chapter']}")
 
     return ''
 

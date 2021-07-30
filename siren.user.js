@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Siren
 // @namespace    https://roadha.us
-// @version      0.2
+// @version      0.3
 // @description  Reports current YouTube video and chapter on change
 // @author       haliphax
 // @match        https://www.youtube.com/watch?v=*
@@ -28,7 +28,8 @@
 
     const extract = RegExp('[?&]v=([^&]+)', 'i');
 
-    let songTitle = null,
+    let channelTitle = null,
+        songTitle = null,
         chapterTitle = null,
         songUrl = null;
 
@@ -40,11 +41,13 @@
             },
             body: JSON.stringify({
                 pwd: sirenPassword,
+                channel: channelTitle,
                 song: songTitle,
                 chapter: chapterTitle,
                 url: songUrl,
             }),
         });
+        console.log(channelTitle);
         console.log(songTitle);
         console.log(songUrl);
     };
@@ -71,21 +74,42 @@
         await update();
     };
 
+    const fetchChannelTitle = async (act) => {
+        channelTitle = document.querySelector('yt-formatted-string.ytd-channel-name .yt-formatted-string').innerText;
+
+        if (act === false) return;
+
+        fetchChapterTitle(false);
+        await update();
+    };
+
     const init = async () => {
-        const video = document.querySelector('h1.title:not(.meta)'),
+        const channel = document.querySelector('#upload-info a.yt-formatted-string:first-of-type'),
+            video = document.querySelector('#info-contents h1'),
             chapter = document.querySelector('.ytp-chapter-title-content');
 
-        if (video === null || chapter === null) {
-            setTimeout(init, 1000);
+        if (channel === null || video === null) {
+            setTimeout(init, 100);
             return;
         }
 
+        new MutationObserver(fetchChannelTitle).observe(
+            channel, { childList: true, subtree: true });
         new MutationObserver(fetchSongTitle).observe(
             video, { childList: true, subtree: true });
         new MutationObserver(fetchChapterTitle).observe(
             chapter, { childList: true, subtree: true });
+
+        await fetchChannelTitle(false);
+        await fetchSongTitle(false);
+
+        if (channelTitle === null || songTitle === null) {
+            setTimeout(init, 100);
+            return;
+        }
+
         console.log('YT Siren: active');
-        await fetchSongTitle();
+        await fetchChannelTitle();
     };
 
     await init();
