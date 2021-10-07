@@ -1,5 +1,6 @@
 # stdlib
 from os import environ
+import re
 # 3rd party
 from flask import abort, Flask, request
 from flask_cors import CORS
@@ -14,8 +15,10 @@ def post():
     if request.json['pwd'] != pwd:
         abort(403)
 
+    channel = re.sub(' - Topic$', '', request.json['channel'])
+
     with open('song.txt', 'w') as f:
-        f.write(f"♫ {request.json['channel']} - {request.json['song']}")
+        f.write(f"♫ {channel} - {request.json['song']}")
 
         if request.json['chapter']:
             f.write(f" - {request.json['chapter']}")
