@@ -30,8 +30,7 @@
 
     let channelTitle = null,
         songTitle = null,
-        chapterTitle = null,
-        songUrl = null;
+        chapterTitle = null;
 
     const update = async () => {
         await fetch(sirenUrl, {
@@ -44,12 +43,11 @@
                 channel: channelTitle,
                 song: songTitle,
                 chapter: chapterTitle,
-                url: songUrl,
+                url: window.location.href,
             }),
         });
         console.log(channelTitle);
         console.log(songTitle);
-        console.log(songUrl);
     };
 
     const fetchSongTitle = async (act) => {
@@ -59,8 +57,6 @@
         fetchChapterTitle(false);
 
         if (act === false) return;
-
-        songUrl = `https://youtu.be/${songId}`;
 
         await update();
     };
