@@ -23,6 +23,9 @@ def post():
         if request.json['chapter']:
             f.write(f" - {request.json['chapter']}")
 
+    with open('url.txt', 'w') as f:
+        f.write(f"{channel} - {request.json['song']} {request.json['url']}")
+
     return ''
 
 
