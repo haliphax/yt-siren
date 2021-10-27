@@ -29,6 +29,9 @@ def post():
     with open('song.txt', 'w') as f:
         f.write(output)
 
+    with open('url.txt', 'w') as f:
+        f.write(f"{channel} - {request.json['song']} {request.json['url']}")
+
     return ''
 
 
