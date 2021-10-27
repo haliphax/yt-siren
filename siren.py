@@ -5,10 +5,11 @@ import re
 from flask import abort, Flask, request
 from flask_cors import CORS
 
+MAX_LENGTH = 120
+
 app = Flask(__name__)
 CORS(app)
 pwd = environ.get('YT_SIREN_PASSWORD', 'changeme')
-
 
 @app.route('/', methods=['POST'])
 def post():
@@ -17,14 +18,16 @@ def post():
 
     channel = re.sub(' - Topic$', '', request.json['channel'])
 
+    output = f"♫ {channel} - {request.json['song']}"
+
+    if request.json['chapter']:
+        output += f" - {request.json['chapter']}"
+
+    if len(output) > MAX_LENGTH:
+        output = f"...{output[-MAX_LENGTH:]}"
+
     with open('song.txt', 'w') as f:
-        f.write(f"♫ {channel} - {request.json['song']}")
-
-        if request.json['chapter']:
-            f.write(f" - {request.json['chapter']}")
-
-    with open('url.txt', 'w') as f:
-        f.write(f"{channel} - {request.json['song']} {request.json['url']}")
+        f.write(output)
 
     return ''
 
