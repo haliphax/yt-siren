@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Siren
 // @namespace    https://roadha.us
-// @version      0.3
+// @version      0.4
 // @description  Reports current YouTube video and chapter on change
 // @author       haliphax
 // @match        https://www.youtube.com/watch?v=*
