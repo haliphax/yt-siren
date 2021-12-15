@@ -17,14 +17,15 @@ def post():
         abort(403)
 
     channel = re.sub(' - Topic$', '', request.json['channel'])
-
-    output = f"♫ {channel} - {request.json['song']}"
+    output = f"{channel} - {request.json['song']}"
 
     if request.json['chapter']:
         output += f" - {request.json['chapter']}"
 
     if len(output) > MAX_LENGTH:
-        output = f"...{output[-MAX_LENGTH:]}"
+        output = f'...{output[-MAX_LENGTH:]}'
+        
+    output += '♫ '
 
     with open('song.txt', 'w') as f:
         f.write(output)
