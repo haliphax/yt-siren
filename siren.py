@@ -5,7 +5,7 @@ import re
 from flask import abort, Flask, request
 from flask_cors import CORS
 
-MAX_LENGTH = 120
+MAX_LENGTH = 100
 
 app = Flask(__name__)
 CORS(app)
