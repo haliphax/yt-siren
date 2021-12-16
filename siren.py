@@ -25,7 +25,7 @@ def post():
     if len(output) > MAX_LENGTH:
         output = f'...{output[-MAX_LENGTH:]}'
         
-    output += '♫ '
+    output = f'♫ {output}'
 
     with open('song.txt', 'w') as f:
         f.write(output)
