@@ -4,6 +4,7 @@ import re
 # 3rd party
 from flask import abort, Flask, request
 from flask_cors import CORS
+from wcwidth import wcwidth, wcswidth
 
 MAX_LENGTH = 100
 
@@ -22,8 +23,19 @@ def post():
     if request.json['chapter']:
         output += f" - {request.json['chapter']}"
 
-    if len(output) > MAX_LENGTH:
-        output = f'...{output[-MAX_LENGTH:]}'
+    if wcswidth(output) > MAX_LENGTH:
+        trimmed = []
+        count = 1
+
+        for c in reversed(output[-MAX_LENGTH:]):
+            count += wcwidth(c)
+
+            if count > MAX_LENGTH:
+                break
+
+            trimmed.append(c)
+
+        output = f'…{"".join(reversed(trimmed))}'
         
     output = f'♫ {output}'
 
