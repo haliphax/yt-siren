@@ -6,7 +6,7 @@ from flask import abort, Flask, request
 from flask_cors import CORS
 from wcwidth import wcwidth, wcswidth
 
-MAX_LENGTH = 100
+MAX_LENGTH = 180
 
 app = Flask(__name__)
 CORS(app)
