@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         YT Siren
 // @namespace    https://roadha.us
-// @version      0.4
+// @version      0.5
 // @description  Reports current YouTube video and chapter on change
 // @author       haliphax
 // @match        https://www.youtube.com/watch?v=*
 // @match        https://music.youtube.com/watch?v=*
+// @match        https://music.youtube.com/
 // @icon         https://www.google.com/s2/favicons?domain=youtube.com
 // @grant        GM_registerMenuCommand
 // @grant        GM_setValue
