@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Siren
 // @namespace    https://roadha.us
-// @version      0.5
+// @version      0.6
 // @description  Reports current YouTube video and chapter on change
 // @author       haliphax
 // @match        https://www.youtube.com/watch?v=*
@@ -163,7 +163,16 @@
         await fetchChannelTitle();
     };
 
-    window.location.hostname === "music.youtube.com"
-        ? initMusic()
-        : initStandard();
+    const startup = () => {
+        try {
+            window.location.hostname === "music.youtube.com"
+                ? initMusic()
+                : initStandard();
+        }
+        catch (e) {
+            setTimeout(startup, 1000);
+        }
+    };
+
+    startup();
 })();
